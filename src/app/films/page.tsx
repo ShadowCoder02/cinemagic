@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Heart, Share2, Calendar, MapPin, Clock, Eye } from 'lucide-react';
 import Image from 'next/image';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+
 import { films } from '@/data/films';
 
 const FilmsPage = () => {
@@ -27,22 +26,22 @@ const FilmsPage = () => {
   };
 
   return (
-    <main className="min-h-screen bg-black">
-      <Header />
-      
+    <main className="min-h-screen bg-slate-50 dark:bg-black transition-colors duration-300">
+
+
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-b from-black to-gray-900">
+      <section className="pt-24 pb-16 bg-gradient-to-b from-slate-100 to-white dark:from-black dark:to-gray-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <h1 className="text-4xl lg:text-6xl font-display font-bold text-white mb-6">
+            <h1 className="text-4xl lg:text-6xl font-display font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
               Wedding <span className="text-gradient">Films</span>
             </h1>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Experience the magic of your special day through our cinematic wedding films. 
+            <p className="text-xl text-gray-700 dark:text-white/80 max-w-3xl mx-auto transition-colors duration-300">
+              Experience the magic of your special day through our cinematic wedding films.
               Each film tells a unique love story with emotion and artistry.
             </p>
           </motion.div>
@@ -57,11 +56,11 @@ const FilmsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl font-display font-bold text-white mb-12 text-center"
+              className="text-3xl font-display font-bold text-gray-900 dark:text-white mb-12 text-center transition-colors duration-300"
             >
               Featured Films
             </motion.h2>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {featuredFilms.map((film, index) => (
                 <motion.div
@@ -70,7 +69,7 @@ const FilmsPage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.2 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gray-800 cursor-pointer"
+                  className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-none shadow-sm dark:shadow-none cursor-pointer transition-colors duration-300"
                   onClick={() => openVideo(film.id)}
                 >
                   <div className="relative aspect-video overflow-hidden">
@@ -80,12 +79,12 @@ const FilmsPage = () => {
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    
+
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
+
                     {/* Featured Badge */}
-                    <div className="absolute top-4 left-4 bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    <div className="absolute top-4 left-4 bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
                       Featured
                     </div>
 
@@ -97,18 +96,18 @@ const FilmsPage = () => {
                     </div>
 
                     {/* Duration */}
-                    <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded text-sm font-medium">
+                    <div className="absolute bottom-4 right-4 bg-gray-900/80 dark:bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded text-sm font-medium">
                       {film.duration}
                     </div>
                   </div>
 
                   <div className="p-6">
-                    <h3 className="text-2xl font-semibold text-white mb-2 group-hover:text-primary-500 transition-colors">
+                    <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                       {film.title}
                     </h3>
-                    <p className="text-white/70 mb-4">{film.description}</p>
-                    
-                    <div className="flex items-center space-x-4 text-white/60 text-sm mb-4">
+                    <p className="text-gray-600 dark:text-white/70 mb-4 transition-colors duration-300">{film.description}</p>
+
+                    <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm mb-4 transition-colors">
                       <div className="flex items-center space-x-1">
                         <MapPin className="w-4 h-4" />
                         <span>{film.location}</span>
@@ -124,7 +123,7 @@ const FilmsPage = () => {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 text-white/60 text-sm">
+                      <div className="flex items-center space-x-4 text-gray-400 dark:text-white/60 text-sm transition-colors">
                         <span className="flex items-center space-x-1">
                           <Eye className="w-4 h-4" />
                           <span>{film.views.toLocaleString()}</span>
@@ -135,10 +134,10 @@ const FilmsPage = () => {
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <button className="p-2 text-white/60 hover:text-primary-500 transition-colors">
+                        <button className="p-2 text-gray-400 dark:text-white/60 hover:text-primary-600 dark:hover:text-primary-500 transition-colors">
                           <Heart className="w-5 h-5" />
                         </button>
-                        <button className="p-2 text-white/60 hover:text-primary-500 transition-colors">
+                        <button className="p-2 text-gray-400 dark:text-white/60 hover:text-primary-600 dark:hover:text-primary-500 transition-colors">
                           <Share2 className="w-5 h-5" />
                         </button>
                       </div>
@@ -152,17 +151,17 @@ const FilmsPage = () => {
       )}
 
       {/* All Films */}
-      <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-16 bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-black transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl font-display font-bold text-white mb-12 text-center"
+            className="text-3xl font-display font-bold text-gray-900 dark:text-white mb-12 text-center transition-colors duration-300"
           >
             All Films
           </motion.h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularFilms.map((film, index) => (
               <motion.div
@@ -171,7 +170,7 @@ const FilmsPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-2xl bg-gray-800 cursor-pointer"
+                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-none shadow-sm dark:shadow-none cursor-pointer transition-colors duration-300"
                 onClick={() => openVideo(film.id)}
               >
                 <div className="relative aspect-video overflow-hidden">
@@ -181,7 +180,7 @@ const FilmsPage = () => {
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  
+
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -193,17 +192,17 @@ const FilmsPage = () => {
                   </div>
 
                   {/* Duration */}
-                  <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded text-sm font-medium">
+                  <div className="absolute bottom-4 right-4 bg-gray-900/80 dark:bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded text-sm font-medium transition-colors">
                     {film.duration}
                   </div>
                 </div>
 
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-primary-500 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                     {film.title}
                   </h3>
-                  
-                  <div className="flex items-center space-x-4 text-white/60 text-sm mb-3">
+
+                  <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm mb-3 transition-colors">
                     <div className="flex items-center space-x-1">
                       <MapPin className="w-4 h-4" />
                       <span>{film.location}</span>
@@ -215,7 +214,7 @@ const FilmsPage = () => {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-white/60 text-sm">
+                    <div className="flex items-center space-x-4 text-gray-400 dark:text-white/60 text-sm transition-colors">
                       <span className="flex items-center space-x-1">
                         <Eye className="w-4 h-4" />
                         <span>{film.views.toLocaleString()}</span>
@@ -226,10 +225,10 @@ const FilmsPage = () => {
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <button className="p-2 text-white/60 hover:text-primary-500 transition-colors">
+                      <button className="p-2 text-gray-400 dark:text-white/60 hover:text-primary-600 dark:hover:text-primary-500 transition-colors">
                         <Heart className="w-4 h-4" />
                       </button>
-                      <button className="p-2 text-white/60 hover:text-primary-500 transition-colors">
+                      <button className="p-2 text-gray-400 dark:text-white/60 hover:text-primary-600 dark:hover:text-primary-500 transition-colors">
                         <Share2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -248,7 +247,7 @@ const FilmsPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 transition-colors duration-300"
             onClick={closeVideo}
           >
             <motion.div
@@ -261,7 +260,7 @@ const FilmsPage = () => {
               {/* Close Button */}
               <button
                 onClick={closeVideo}
-                className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                className="absolute top-4 right-4 z-10 w-10 h-10 bg-gray-900/50 dark:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-gray-900/70 dark:hover:bg-white/30 transition-colors text-2xl"
               >
                 ×
               </button>
@@ -270,7 +269,7 @@ const FilmsPage = () => {
               {(() => {
                 const film = films.find(f => f.id === selectedVideo);
                 if (!film) return null;
-                
+
                 return (
                   <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
                     <video
@@ -283,9 +282,9 @@ const FilmsPage = () => {
                       <source src={film.videoUrl} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
-                    
+
                     {/* Video Info Overlay */}
-                    <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg p-4 text-white">
+                    <div className="absolute bottom-4 left-4 bg-gray-900/80 dark:bg-black/50 backdrop-blur-sm rounded-lg p-4 text-white shadow-lg transition-colors duration-300">
                       <h3 className="text-xl font-semibold mb-2">{film.title}</h3>
                       <p className="text-white/80 text-sm mb-2">{film.description}</p>
                       <div className="flex items-center space-x-4 text-white/60 text-sm">
@@ -302,7 +301,7 @@ const FilmsPage = () => {
         )}
       </AnimatePresence>
 
-      <Footer />
+
     </main>
   );
 };

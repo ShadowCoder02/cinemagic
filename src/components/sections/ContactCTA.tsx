@@ -1,10 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Phone, MessageCircle, Calendar, MapPin, Star, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Phone, MessageCircle, Calendar, MapPin, Star, ArrowRight, Award, Coffee } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
 export default function ContactCTA() {
+  const router = useRouter();
   const contactMethods = [
     {
       icon: Phone,
@@ -27,7 +29,7 @@ export default function ContactCTA() {
       title: 'Book Consultation',
       description: 'Free 30-min call',
       action: 'Schedule Now',
-      href: '#booking',
+      href: '/contact',
       color: 'text-blue-500',
     },
     {
@@ -40,17 +42,16 @@ export default function ContactCTA() {
     },
   ];
 
-  const stats = [
-    { number: '500+', label: 'Happy Couples' },
-    { number: '8+', label: 'Years Experience' },
-    { number: '100%', label: 'Satisfaction Rate' },
-  ];
+
 
   return (
-    <section className="py-20 bg-cosmic-gradient relative overflow-hidden">
+    <section id="contact" className="py-20 bg-slate-50 dark:bg-cosmic-gradient relative overflow-hidden transition-colors duration-300">
+      {/* Light Mode Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-50/30 to-white opacity-100 dark:opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
       {/* Cosmic Background */}
-      <div className="absolute inset-0 bg-star-field opacity-10"></div>
-      <div className="absolute inset-0 bg-nebula opacity-5"></div>
+      <div className="absolute inset-0 bg-star-field opacity-0 dark:opacity-10 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-nebula opacity-0 dark:opacity-5 transition-opacity duration-300"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -61,10 +62,10 @@ export default function ContactCTA() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl lg:text-5xl font-display font-bold text-white mb-6">
-            Ready to Create <span className="text-cosmic">Magic</span> Together?
+          <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
+            Ready to Create <span className="text-primary-600 dark:text-cosmic">Magic</span> Together?
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 dark:text-white/80 max-w-3xl mx-auto transition-colors duration-300">
             Let’s discuss your vision and create something extraordinary. 
             Every love story deserves to be told beautifully.
           </p>
@@ -81,17 +82,17 @@ export default function ContactCTA() {
               viewport={{ once: true }}
               className="group relative"
             >
-              <div className="bg-space-900/50 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-primary-500/50 transition-all duration-300 premium-hover cosmic-glow">
+              <div className="bg-white dark:bg-space-900/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-100 dark:border-white/10 hover:border-primary-500/50 dark:hover:border-primary-500/50 shadow-sm dark:shadow-none transition-all duration-300 premium-hover dark:cosmic-glow">
                 <div className="text-center space-y-4">
-                  <div className={`w-16 h-16 mx-auto rounded-full bg-space-800/50 flex items-center justify-center group-hover:bg-primary-500/20 transition-colors duration-300`}>
-                    <method.icon className={`w-8 h-8 ${method.color} group-hover:text-primary-500 transition-colors duration-300`} />
+                  <div className={`w-16 h-16 mx-auto rounded-full bg-gray-50 dark:bg-space-800/50 flex items-center justify-center group-hover:bg-primary-50/80 dark:group-hover:bg-primary-500/20 transition-colors duration-300`}>
+                    <method.icon className={`w-8 h-8 ${method.color} group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors duration-300`} />
                   </div>
                   
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
                       {method.title}
                     </h3>
-                    <p className="text-white/70 text-sm mb-4">
+                    <p className="text-gray-500 dark:text-white/70 text-sm mb-4 transition-colors duration-300">
                       {method.description}
                     </p>
                   </div>
@@ -99,8 +100,20 @@ export default function ContactCTA() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full group-hover:bg-primary-500/20 group-hover:text-primary-500 transition-all duration-300"
-                    onClick={() => window.open(method.href, '_blank')}
+                    className="w-full text-gray-700 dark:text-white group-hover:bg-primary-50 group-hover:text-primary-600 dark:group-hover:bg-primary-500/20 dark:group-hover:text-primary-500 transition-all duration-300"
+                    onClick={() => {
+                      if (method.href.startsWith('/')) {
+                        router.push(method.href);
+                        return;
+                      }
+
+                      if (method.href.startsWith('tel:') || method.href.startsWith('mailto:')) {
+                        window.location.href = method.href;
+                        return;
+                      }
+
+                      window.open(method.href, '_blank', 'noopener,noreferrer');
+                    }}
                   >
                     {method.action}
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -111,34 +124,7 @@ export default function ContactCTA() {
           ))}
         </div>
 
-        {/* Stats Section */}
-        <motion.div 
-          className="bg-space-900/30 backdrop-blur-sm rounded-2xl p-8 border border-white/10 mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <div className="text-4xl lg:text-5xl font-bold text-primary-500 mb-2 animate-pulse-glow">
-                  {stat.number}
-                </div>
-                <div className="text-white/70 text-lg">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+
 
         {/* CTA Section */}
         <motion.div 
@@ -149,10 +135,10 @@ export default function ContactCTA() {
           viewport={{ once: true }}
         >
           <div className="space-y-4">
-            <h3 className="text-3xl font-bold text-white">
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
               Let’s Start Your Journey
             </h3>
-            <p className="text-white/80 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-700 dark:text-white/80 text-lg max-w-2xl mx-auto transition-colors duration-300">
               Every great love story begins with a single moment. 
               Let’s capture yours together.
             </p>
@@ -163,6 +149,9 @@ export default function ContactCTA() {
               variant="primary"
               size="lg"
               className="cosmic-glow group"
+              onClick={() => {
+                window.location.href = 'tel:+94776216556';
+              }}
             >
               <Phone className="w-5 h-5 mr-2" />
               Call Now: +94 77 621 6556
@@ -171,25 +160,32 @@ export default function ContactCTA() {
             <Button
               variant="secondary"
               size="lg"
-              className="glass-effect group"
+              className="bg-white/50 dark:bg-transparent dark:glass-effect hover:bg-white text-gray-900 dark:text-white border-gray-200 dark:border-primary-500 group transition-all"
+              onClick={() => {
+                window.open('https://wa.me/94776216556', '_blank', 'noopener,noreferrer');
+              }}
             >
-              <MessageCircle className="w-5 h-5 mr-2" />
+              <MessageCircle className="w-5 h-5 mr-2 text-primary-600 dark:text-primary-500" />
               WhatsApp Chat
             </Button>
           </div>
 
           {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-8 text-white/60 text-sm">
-            <div className="flex items-center space-x-2">
-              <Star className="w-4 h-4 text-primary-500 fill-current" />
-              <span>5.0 Rating</span>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-gray-700 dark:text-white/80 font-medium transition-colors duration-300 pt-4">
+            <div className="flex items-center space-x-3 bg-white dark:bg-white/5 px-5 py-2.5 rounded-full border border-gray-100 dark:border-white/10 shadow-sm premium-hover">
+              <div className="flex space-x-0.5">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} className="w-4 h-4 text-primary-500 fill-primary-500 drop-shadow-sm" />
+                ))}
+              </div>
+              <span className="font-semibold">5.0 Rating</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-4 h-4 bg-primary-500 rounded-full"></div>
+            <div className="flex items-center space-x-2 bg-white dark:bg-white/5 px-5 py-2.5 rounded-full border border-gray-100 dark:border-white/10 shadow-sm premium-hover">
+              <Award className="w-5 h-5 text-primary-500 drop-shadow-sm" />
               <span>Premium Service</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-4 h-4 bg-primary-500 rounded-full"></div>
+            <div className="flex items-center space-x-2 bg-white dark:bg-white/5 px-5 py-2.5 rounded-full border border-gray-100 dark:border-white/10 shadow-sm premium-hover">
+              <Coffee className="w-5 h-5 text-primary-500 drop-shadow-sm" />
               <span>Free Consultation</span>
             </div>
           </div>

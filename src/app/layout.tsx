@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -73,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -153,8 +157,17 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} antialiased bg-cosmic-gradient text-white`}>
-        {children}
+      <body className={`${inter.className} antialiased min-h-screen bg-slate-50 text-slate-900 dark:bg-cosmic-black dark:text-white transition-colors duration-300`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <WhatsAppFloat />
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

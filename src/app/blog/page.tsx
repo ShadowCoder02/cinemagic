@@ -5,13 +5,17 @@ import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight, Search, Clock, Eye, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+
 
 const BlogPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedTag, setSelectedTag] = useState('all');
+
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
 
   const categories = [
     { id: 'all', name: 'All Posts', count: 24 },
@@ -23,7 +27,7 @@ const BlogPage = () => {
   ];
 
   const tags = [
-    'wedding', 'photography', 'cinematography', 'jaffna', 'sri-lanka', 
+    'wedding', 'photography', 'cinematography', 'jaffna', 'sri-lanka',
     'love-story', 'graduation', 'engagement', 'tips', 'behind-scenes'
   ];
 
@@ -122,10 +126,10 @@ const BlogPage = () => {
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
     const matchesTag = selectedTag === 'all' || post.tags.includes(selectedTag);
-    
+
     return matchesSearch && matchesCategory && matchesTag;
   });
 
@@ -133,22 +137,22 @@ const BlogPage = () => {
   const regularPosts = filteredPosts.filter(post => !post.featured);
 
   return (
-    <main className="min-h-screen bg-black">
-      <Header />
-      
+    <main className="min-h-screen bg-slate-50 dark:bg-black transition-colors duration-300">
+
+
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-b from-black to-gray-900">
+      <section className="pt-24 pb-16 bg-gradient-to-b from-slate-100 to-white dark:from-black dark:to-gray-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <h1 className="text-4xl lg:text-6xl font-display font-bold text-white mb-6">
+            <h1 className="text-4xl lg:text-6xl font-display font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
               Our <span className="text-gradient">Blog</span>
             </h1>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Stories, tips, and insights from the world of wedding photography and cinematography. 
+            <p className="text-xl text-gray-700 dark:text-white/80 max-w-3xl mx-auto transition-colors duration-300">
+              Stories, tips, and insights from the world of wedding photography and cinematography.
               Learn from our experiences and get inspired for your special day.
             </p>
           </motion.div>
@@ -156,18 +160,18 @@ const BlogPage = () => {
       </section>
 
       {/* Search & Filters */}
-      <section className="py-8 bg-gray-900/50 backdrop-blur-sm border-b border-white/10">
+      <section className="py-8 bg-white/80 dark:bg-gray-900/50 backdrop-blur-sm border-b border-gray-200 dark:border-white/10 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-6 items-center">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
+            <div className="relative flex-1 max-w-md w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/60 transition-colors" />
               <input
                 type="text"
                 placeholder="Search blog posts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/70 focus:outline-none focus:border-primary-500 focus:bg-white/20 transition-all duration-300"
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/20 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:focus:bg-white/20 transition-all duration-300 shadow-sm dark:shadow-none"
               />
             </div>
 
@@ -177,11 +181,10 @@ const BlogPage = () => {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === category.id
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === category.id
                       ? 'bg-primary-500 text-white shadow-lg'
-                      : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
-                  }`}
+                      : 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-900 dark:hover:text-white'
+                    }`}
                 >
                   {category.name} ({category.count})
                 </button>
@@ -193,7 +196,7 @@ const BlogPage = () => {
               <select
                 value={selectedTag}
                 onChange={(e) => setSelectedTag(e.target.value)}
-                className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                className="px-4 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/20 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm dark:shadow-none transition-colors duration-300"
               >
                 <option value="all">All Tags</option>
                 {tags.map((tag) => (
@@ -213,11 +216,11 @@ const BlogPage = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl font-display font-bold text-white mb-12 text-center"
+              className="text-3xl font-display font-bold text-gray-900 dark:text-white mb-12 text-center transition-colors duration-300"
             >
               Featured Posts
             </motion.h2>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {featuredPosts.map((post, index) => (
                 <motion.article
@@ -226,7 +229,7 @@ const BlogPage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.2 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gray-800 cursor-pointer"
+                  className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-none shadow-sm dark:shadow-none cursor-pointer transition-colors duration-300"
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
@@ -235,35 +238,35 @@ const BlogPage = () => {
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    
+
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
+
                     {/* Featured Badge */}
                     <div className="absolute top-4 left-4 bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                       Featured
                     </div>
 
                     {/* Category */}
-                    <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
+                    <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-medium border border-white/20">
                       {categories.find(c => c.id === post.category)?.name}
                     </div>
                   </div>
 
                   <div className="p-6">
-                    <h3 className="text-2xl font-semibold text-white mb-3 group-hover:text-primary-500 transition-colors">
+                    <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                       {post.title}
                     </h3>
-                    <p className="text-white/70 mb-4 line-clamp-3">{post.excerpt}</p>
-                    
-                    <div className="flex items-center space-x-4 text-white/60 text-sm mb-4">
+                    <p className="text-gray-600 dark:text-white/70 mb-4 line-clamp-3 transition-colors duration-300">{post.excerpt}</p>
+
+                    <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm mb-4 transition-colors">
                       <div className="flex items-center space-x-1">
                         <User className="w-4 h-4" />
                         <span>{post.author}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(post.date).toLocaleDateString()}</span>
+                        <span>{formatDate(post.date)}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Clock className="w-4 h-4" />
@@ -272,7 +275,7 @@ const BlogPage = () => {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 text-white/60 text-sm">
+                      <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm transition-colors">
                         <span className="flex items-center space-x-1">
                           <Eye className="w-4 h-4" />
                           <span>{post.views}</span>
@@ -299,17 +302,17 @@ const BlogPage = () => {
       )}
 
       {/* All Posts */}
-      <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-16 bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-black transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl font-display font-bold text-white mb-12 text-center"
+            className="text-3xl font-display font-bold text-gray-900 dark:text-white mb-12 text-center transition-colors duration-300"
           >
             All Posts
           </motion.h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularPosts.map((post, index) => (
               <motion.article
@@ -318,7 +321,7 @@ const BlogPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-2xl bg-gray-800 cursor-pointer"
+                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-none shadow-sm dark:shadow-none cursor-pointer transition-colors duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
@@ -327,35 +330,35 @@ const BlogPage = () => {
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  
+
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   {/* Category */}
-                  <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
+                  <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-medium border border-white/20">
                     {categories.find(c => c.id === post.category)?.name}
                   </div>
                 </div>
 
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-primary-500 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                     {post.title}
                   </h3>
-                  <p className="text-white/70 mb-4 line-clamp-2">{post.excerpt}</p>
-                  
-                  <div className="flex items-center space-x-4 text-white/60 text-sm mb-4">
+                  <p className="text-gray-600 dark:text-white/70 mb-4 line-clamp-2 transition-colors duration-300">{post.excerpt}</p>
+
+                  <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm mb-4 transition-colors">
                     <div className="flex items-center space-x-1">
                       <User className="w-4 h-4" />
                       <span>{post.author}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-4 h-4" />
-                      <span>{new Date(post.date).toLocaleDateString()}</span>
+                      <span>{formatDate(post.date)}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-white/60 text-sm">
+                    <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm transition-colors">
                       <span className="flex items-center space-x-1">
                         <Eye className="w-4 h-4" />
                         <span>{post.views}</span>
@@ -385,7 +388,7 @@ const BlogPage = () => {
               animate={{ opacity: 1 }}
               className="text-center py-12"
             >
-              <div className="text-white/60 text-lg mb-4">No posts found matching your criteria</div>
+              <div className="text-gray-500 dark:text-white/60 text-lg mb-4 transition-colors">No posts found matching your criteria</div>
               <button
                 onClick={() => {
                   setSearchTerm('');
@@ -401,7 +404,7 @@ const BlogPage = () => {
         </div>
       </section>
 
-      <Footer />
+
     </main>
   );
 };

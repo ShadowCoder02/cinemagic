@@ -34,10 +34,10 @@ const cardVariants = {
 
 export default function FeaturedFilms() {
   return (
-    <section className="relative py-20 bg-black overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black opacity-80"></div>
-      <div className="absolute inset-0 bg-star-field opacity-10"></div>
-      <div className="absolute inset-0 bg-nebula opacity-10"></div>
+    <section id="films" className="relative py-20 bg-slate-50 dark:bg-black overflow-hidden transition-colors duration-300">
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-100 via-white to-slate-100 dark:from-black dark:via-gray-900 dark:to-black opacity-100 dark:opacity-80 transition-colors duration-300"></div>
+      <div className="absolute inset-0 bg-star-field opacity-0 dark:opacity-10 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-nebula opacity-0 dark:opacity-10 transition-opacity duration-300"></div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -47,11 +47,11 @@ export default function FeaturedFilms() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-sm uppercase tracking-[0.4em] text-primary-400 mb-4">Signature Films</p>
-          <h2 className="text-4xl lg:text-5xl font-display font-bold text-white mb-6">
+          <p className="text-sm uppercase tracking-[0.4em] text-primary-600 dark:text-primary-400 mb-4 transition-colors">Signature Films</p>
+          <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
             Featured <span className="text-gradient">Films</span>
           </h2>
-          <p className="text-lg lg:text-xl text-white/70">
+          <p className="text-lg lg:text-xl text-gray-700 dark:text-white/70 transition-colors duration-300">
             Press play on the love stories our couples can&apos;t stop replaying. Each film is a crafted blend of
             emotion, rhythm, and cinematic storytelling.
           </p>
@@ -67,7 +67,7 @@ export default function FeaturedFilms() {
           {featuredFilms.map((film, index) => (
             <motion.article
               key={film.id}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl"
+              className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-gray-200/50 dark:shadow-none transition-all duration-300"
               variants={cardVariants}
               transition={{ delay: index * 0.1 }}
             >
@@ -101,14 +101,14 @@ export default function FeaturedFilms() {
 
               <div className="p-6 space-y-4">
                 <div className="space-y-1">
-                  <p className="text-sm text-primary-300 tracking-[0.3em] uppercase">{film.category}</p>
-                  <h3 className="text-2xl font-semibold text-white group-hover:text-primary-400 transition-colors">
+                  <p className="text-sm text-primary-600 dark:text-primary-300 tracking-[0.3em] uppercase transition-colors">{film.category}</p>
+                  <h3 className="text-2xl font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                     {film.title}
                   </h3>
                 </div>
-                <p className="text-white/70 text-base leading-relaxed">{film.description}</p>
+                <p className="text-gray-600 dark:text-white/70 text-base leading-relaxed transition-colors duration-300">{film.description}</p>
 
-                <div className="flex flex-wrap items-center gap-4 text-white/60 text-sm">
+                <div className="flex flex-wrap items-center gap-4 text-gray-500 dark:text-white/60 text-sm transition-colors">
                   <span className="inline-flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
                     {film.location}
@@ -143,7 +143,7 @@ export default function FeaturedFilms() {
       </div>
 
       <div className="absolute -top-24 -right-20 w-64 h-64 bg-primary-500/20 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-16 -left-20 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-16 -left-20 w-72 h-72 bg-primary-500/20 rounded-full blur-3xl"></div>
     </section>
   );
 }

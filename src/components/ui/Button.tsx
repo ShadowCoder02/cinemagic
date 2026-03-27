@@ -20,7 +20,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary: 'bg-primary-500 hover:bg-primary-600 text-white focus:ring-primary-500 shadow-lg hover:shadow-xl',
       secondary: 'bg-transparent border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-500',
       ghost: 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20',
-      outline: 'bg-transparent border-2 border-white text-white hover:bg-white hover:text-black focus:ring-white'
+      outline: 'bg-transparent border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black focus:ring-gray-900 dark:focus:ring-white transition-colors'
     };
 
     const sizes = {

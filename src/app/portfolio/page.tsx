@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, Heart, Share2, Calendar, MapPin, Grid, List } from 'lucide-react';
 import Image from 'next/image';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+
 
 const PortfolioPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -119,27 +118,27 @@ const PortfolioPage = () => {
     },
   ];
 
-  const filteredItems = activeCategory === 'all' 
-    ? portfolioItems 
+  const filteredItems = activeCategory === 'all'
+    ? portfolioItems
     : portfolioItems.filter(item => item.category === activeCategory);
 
   return (
-    <main className="min-h-screen bg-black">
-      <Header />
-      
+    <main className="min-h-screen bg-slate-50 dark:bg-black transition-colors duration-300">
+
+
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-b from-black to-gray-900">
+      <section className="pt-24 pb-16 bg-gradient-to-b from-slate-100 to-white dark:from-black dark:to-gray-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <h1 className="text-4xl lg:text-6xl font-display font-bold text-white mb-6">
+            <h1 className="text-4xl lg:text-6xl font-display font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
               Our <span className="text-gradient">Portfolio</span>
             </h1>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Explore our collection of wedding photography, films, and graduation captures. 
+            <p className="text-xl text-gray-700 dark:text-white/80 max-w-3xl mx-auto transition-colors duration-300">
+              Explore our collection of wedding photography, films, and graduation captures.
               Each image tells a unique story of love, joy, and celebration.
             </p>
           </motion.div>
@@ -147,7 +146,7 @@ const PortfolioPage = () => {
       </section>
 
       {/* Filters & Controls */}
-      <section className="py-8 bg-gray-900/50 backdrop-blur-sm border-b border-white/10">
+      <section className="py-8 bg-white/80 dark:bg-gray-900/50 backdrop-blur-sm border-b border-gray-200 dark:border-white/10 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             {/* Category Filter */}
@@ -156,11 +155,10 @@ const PortfolioPage = () => {
                 <button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    activeCategory === category.id
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeCategory === category.id
                       ? 'bg-primary-500 text-white shadow-lg'
-                      : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
-                  }`}
+                      : 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-900 dark:hover:text-white'
+                    }`}
                 >
                   {category.name} ({category.count})
                 </button>
@@ -169,20 +167,18 @@ const PortfolioPage = () => {
 
             {/* View Controls */}
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-1">
+              <div className="flex items-center space-x-2 bg-gray-100 dark:bg-white/10 rounded-lg p-1 transition-colors">
                 <button
                   onClick={() => setViewMode('masonry')}
-                  className={`p-2 rounded transition-colors ${
-                    viewMode === 'masonry' ? 'bg-primary-500 text-white' : 'text-white/70 hover:text-white'
-                  }`}
+                  className={`p-2 rounded transition-colors ${viewMode === 'masonry' ? 'bg-primary-500 text-white' : 'text-gray-500 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
+                    }`}
                 >
                   <Grid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded transition-colors ${
-                    viewMode === 'grid' ? 'bg-primary-500 text-white' : 'text-white/70 hover:text-white'
-                  }`}
+                  className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-primary-500 text-white' : 'text-gray-500 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
+                    }`}
                 >
                   <List className="w-4 h-4" />
                 </button>
@@ -212,9 +208,8 @@ const PortfolioPage = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`group relative overflow-hidden rounded-2xl bg-gray-800 ${
-                    viewMode === 'masonry' ? 'masonry-item' : ''
-                  }`}
+                  className={`group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-none shadow-sm dark:shadow-none transition-colors duration-300 ${viewMode === 'masonry' ? 'masonry-item' : ''
+                    }`}
                   onMouseEnter={() => setHoveredItem(item.id)}
                   onMouseLeave={() => setHoveredItem(null)}
                   onClick={() => setSelectedImage(item.id)}
@@ -227,10 +222,10 @@ const PortfolioPage = () => {
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    
+
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
+
                     {/* Featured Badge */}
                     {item.featured && (
                       <div className="absolute top-4 left-4 bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -241,7 +236,7 @@ const PortfolioPage = () => {
                     {/* Hover Actions */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
-                      animate={{ 
+                      animate={{
                         opacity: hoveredItem === item.id ? 1 : 0,
                         y: hoveredItem === item.id ? 0 : 20
                       }}
@@ -261,11 +256,11 @@ const PortfolioPage = () => {
 
                   {/* Content */}
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-primary-500 transition-colors">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                       {item.title}
                     </h3>
-                    
-                    <div className="flex items-center space-x-4 text-white/60 text-sm mb-3">
+
+                    <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm mb-3 transition-colors">
                       <div className="flex items-center space-x-1">
                         <MapPin className="w-4 h-4" />
                         <span>{item.location}</span>
@@ -276,7 +271,7 @@ const PortfolioPage = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-white/60 text-sm">
+                    <div className="flex items-center justify-between text-gray-500 dark:text-white/60 text-sm transition-colors">
                       <div className="flex items-center space-x-4">
                         <span className="flex items-center space-x-1">
                           <Heart className="w-4 h-4" />
@@ -310,7 +305,7 @@ const PortfolioPage = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              className="relative max-w-4xl max-h-[90vh] w-full"
+              className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center p-4"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -319,19 +314,20 @@ const PortfolioPage = () => {
               >
                 ×
               </button>
-              <Image
-                src={portfolioItems.find(item => item.id === selectedImage)?.image || ''}
-                alt={portfolioItems.find(item => item.id === selectedImage)?.title || ''}
-                width={800}
-                height={600}
-                className="w-full h-full object-contain rounded-lg"
-              />
+              <div className="relative w-full h-[80vh]">
+                <Image
+                  src={portfolioItems.find(item => item.id === selectedImage)?.image || ''}
+                  alt={portfolioItems.find(item => item.id === selectedImage)?.title || ''}
+                  fill
+                  className="object-contain rounded-lg"
+                />
+              </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <Footer />
+
     </main>
   );
 };

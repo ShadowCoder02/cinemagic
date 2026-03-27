@@ -3,14 +3,15 @@
 import { motion } from 'framer-motion';
 import { Camera, Film, Award, Users, Star } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Button from '@/components/ui/Button';
 
 export default function AboutPreview() {
   const stats = [
-    { number: '500+', label: 'Weddings Captured', icon: Camera },
+    { number: '5+', label: 'Weddings Captured', icon: Camera },
     { number: '200+', label: 'Films Created', icon: Film },
     { number: '8+', label: 'Years Experience', icon: Award },
-    { number: '1000+', label: 'Happy Couples', icon: Users },
+    { number: '10+', label: 'Happy Couples', icon: Users },
   ];
 
   const testimonials = [
@@ -41,10 +42,13 @@ export default function AboutPreview() {
   ];
 
   return (
-    <section className="py-20 bg-cosmic-gradient relative overflow-hidden">
+    <section id="about" className="py-20 bg-slate-50 dark:bg-cosmic-gradient relative overflow-hidden transition-colors duration-300">
+      {/* Light Mode Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-50/30 to-white opacity-100 dark:opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
       {/* Cosmic Background */}
-      <div className="absolute inset-0 bg-star-field opacity-10"></div>
-      <div className="absolute inset-0 bg-nebula opacity-5"></div>
+      <div className="absolute inset-0 bg-star-field opacity-0 dark:opacity-10 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-nebula opacity-0 dark:opacity-5 transition-opacity duration-300"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -57,11 +61,11 @@ export default function AboutPreview() {
             className="space-y-8"
           >
             <div className="space-y-6">
-              <h2 className="text-4xl lg:text-5xl font-display font-bold text-white">
-                Meet <span className="text-cosmic">Keerththikan</span>
+              <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                Meet <span className="text-primary-600 dark:text-cosmic">Keerththikan</span>
               </h2>
               
-              <div className="space-y-4 text-lg text-white/80 leading-relaxed">
+              <div className="space-y-4 text-lg text-gray-700 dark:text-white/80 leading-relaxed transition-colors duration-300">
                 <p>
                   With over 8 years of experience in wedding photography and cinematography, 
                   I specialize in capturing the raw emotions and intimate moments that make 
@@ -85,13 +89,13 @@ export default function AboutPreview() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="text-center p-6 bg-space-900/50 backdrop-blur-sm rounded-xl border border-white/10 cosmic-glow"
+                  className="text-center p-6 bg-white dark:bg-space-900/50 backdrop-blur-sm rounded-xl border border-gray-100 dark:border-white/10 shadow-sm dark:shadow-none dark:cosmic-glow transition-all duration-300"
                 >
-                  <stat.icon className="w-8 h-8 text-primary-500 mx-auto mb-3" />
-                  <div className="text-2xl font-bold text-primary-500 mb-1">
+                  <stat.icon className="w-8 h-8 text-primary-600 dark:text-primary-500 mx-auto mb-3 transition-colors" />
+                  <div className="text-2xl font-bold text-primary-600 dark:text-primary-500 mb-1 transition-colors">
                     {stat.number}
                   </div>
-                  <div className="text-white/70 text-sm">
+                  <div className="text-gray-600 dark:text-white/70 text-sm transition-colors duration-300">
                     {stat.label}
                   </div>
                 </motion.div>
@@ -100,20 +104,24 @@ export default function AboutPreview() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                variant="primary"
-                size="lg"
-                className="cosmic-glow"
-              >
-                Read Full Story
-              </Button>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="glass-effect"
-              >
-                View Testimonials
-              </Button>
+              <Link href="/about">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="cosmic-glow w-full sm:w-auto"
+                >
+                  Read Full Story
+                </Button>
+              </Link>
+              <Link href="/about#testimonials">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  View Testimonials
+                </Button>
+              </Link>
             </div>
           </motion.div>
 
@@ -151,7 +159,7 @@ export default function AboutPreview() {
 
             {/* Testimonials Carousel */}
             <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-white mb-6">What Our Clients Say</h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">What Our Clients Say</h3>
               
               <div className="space-y-4">
                 {testimonials.map((testimonial, index) => (
@@ -161,7 +169,7 @@ export default function AboutPreview() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    className="bg-space-900/50 backdrop-blur-sm rounded-xl p-6 border border-white/10 cosmic-glow"
+                    className="bg-white dark:bg-space-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-none dark:cosmic-glow transition-all duration-300"
                   >
                     <div className="flex items-start space-x-4">
                       <div className="flex-shrink-0">
@@ -183,12 +191,12 @@ export default function AboutPreview() {
                           ))}
                         </div>
                         
-                        <blockquote className="text-white/80 text-sm mb-3">
+                        <blockquote className="text-gray-700 dark:text-white/80 text-sm mb-3 transition-colors duration-300">
                           “{testimonial.content}”
                         </blockquote>
                         
-                        <div className="text-white/60 text-xs">
-                          <div className="font-semibold">{testimonial.name}</div>
+                        <div className="text-gray-500 dark:text-white/60 text-xs transition-colors duration-300">
+                          <div className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</div>
                           <div>{testimonial.role}</div>
                         </div>
                       </div>

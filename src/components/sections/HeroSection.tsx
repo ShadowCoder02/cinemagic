@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Volume2, VolumeX, Maximize, Calendar } from 'lucide-react';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
 
 export default function HeroSection() {
+  const router = useRouter();
   const [currentVideo, setCurrentVideo] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -53,9 +55,9 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative h-screen overflow-hidden space-texture">
+    <section id="home" className="relative h-screen overflow-hidden space-texture">
       {/* Cosmic Background */}
-      <div className="absolute inset-0 bg-cosmic-gradient">
+      <div className="absolute inset-0 bg-cosmic-gradient opacity-0 dark:opacity-100 transition-opacity duration-500">
         {/* Starry overlay */}
         <div className="absolute inset-0 bg-star-field opacity-30"></div>
         <div className="absolute inset-0 bg-nebula opacity-20"></div>
@@ -82,7 +84,7 @@ export default function HeroSection() {
             />
             
             {/* Cinematic Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/40 to-black/80"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/40 to-white/90 dark:from-black/80 dark:via-black/40 dark:to-black/80 transition-colors duration-500"></div>
             
             {/* Cosmic particles overlay */}
             <div className="absolute inset-0 opacity-20">
@@ -124,13 +126,13 @@ export default function HeroSection() {
           >
             {/* Cosmic Title */}
             <motion.h1 
-              className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold text-white leading-tight"
+              className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold text-gray-900 dark:text-white leading-tight transition-colors duration-300"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7 }}
             >
               Capturing Love, Stories, and{' '}
-              <span className="text-cosmic bg-gradient-to-r from-primary-500 via-white to-primary-500 bg-clip-text text-transparent animate-shimmer">
+              <span className="text-primary-600 dark:text-cosmic dark:bg-gradient-to-r dark:from-primary-500 dark:via-white dark:to-primary-500 dark:bg-clip-text dark:text-transparent animate-shimmer">
                 Moments
               </span>
               <br />
@@ -138,7 +140,7 @@ export default function HeroSection() {
             </motion.h1>
 
             <motion.p 
-              className="text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl lg:text-2xl text-gray-700 dark:text-white/90 max-w-3xl mx-auto leading-relaxed transition-colors duration-300"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.9 }}
@@ -157,6 +159,7 @@ export default function HeroSection() {
                 variant="primary"
                 size="lg"
                 className="group cosmic-glow"
+                onClick={() => router.push('/#portfolio')}
               >
                 <Play className="w-5 h-5 mr-2 group-hover:animate-pulse" />
                 View Portfolio
@@ -166,6 +169,7 @@ export default function HeroSection() {
                 variant="secondary"
                 size="lg"
                 className="group glass-effect hover:bg-white/20"
+                onClick={() => router.push('/#contact')}
               >
                 <Calendar className="w-5 h-5 mr-2 group-hover:animate-pulse" />
                 Book Your Wedding Film
@@ -174,32 +178,32 @@ export default function HeroSection() {
 
             {/* Stats */}
             <motion.div 
-              className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-12"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto pt-12"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1.3 }}
             >
-              <div className="text-center">
-                <div className="text-3xl lg:text-4xl font-bold text-primary-500 mb-2 animate-pulse-glow">
+              <div className="flex flex-col items-center justify-center p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 shadow-xl dark:shadow-2xl">
+                <div className="text-4xl lg:text-5xl font-display font-bold text-primary-600 dark:text-primary-500 mb-2 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
                   500+
                 </div>
-                <div className="text-white/80 text-sm lg:text-base">
+                <div className="text-gray-800 dark:text-white/80 font-medium text-sm lg:text-base tracking-wide transition-colors duration-300">
                   Weddings Captured
                 </div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl lg:text-4xl font-bold text-primary-500 mb-2 animate-pulse-glow">
+              <div className="flex flex-col items-center justify-center p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 shadow-xl dark:shadow-2xl">
+                <div className="text-4xl lg:text-5xl font-display font-bold text-primary-600 dark:text-primary-500 mb-2 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
                   8+
                 </div>
-                <div className="text-white/80 text-sm lg:text-base">
+                <div className="text-gray-800 dark:text-white/80 font-medium text-sm lg:text-base tracking-wide transition-colors duration-300">
                   Years Experience
                 </div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl lg:text-4xl font-bold text-primary-500 mb-2 animate-pulse-glow">
+              <div className="flex flex-col items-center justify-center p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 shadow-xl dark:shadow-2xl">
+                <div className="text-4xl lg:text-5xl font-display font-bold text-primary-600 dark:text-primary-500 mb-2 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
                   100%
                 </div>
-                <div className="text-white/80 text-sm lg:text-base">
+                <div className="text-gray-800 dark:text-white/80 font-medium text-sm lg:text-base tracking-wide transition-colors duration-300">
                   Client Satisfaction
                 </div>
               </div>
@@ -208,25 +212,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-      >
-        <div className="flex flex-col items-center text-white/80">
-          <span className="text-sm mb-2">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </motion.div>
-        </div>
-      </motion.div>
+
 
       {/* Video Controls */}
       <motion.div 

@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, Heart, Share2, Calendar, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
 
 export default function FeaturedWork() {
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState('All Work');
 
   const filters = ['All Work', 'Weddings', 'Engagements', 'Graduations'];
@@ -85,10 +87,13 @@ export default function FeaturedWork() {
   );
 
   return (
-    <section className="py-20 bg-cosmic-gradient relative overflow-hidden">
+    <section id="portfolio" className="py-20 bg-slate-50 dark:bg-cosmic-gradient relative overflow-hidden transition-colors duration-300">
+      {/* Light Mode Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-50/30 to-white opacity-100 dark:opacity-0 pointer-events-none transition-opacity duration-300"></div>
+      
       {/* Cosmic Background Effects */}
-      <div className="absolute inset-0 bg-star-field opacity-10"></div>
-      <div className="absolute inset-0 bg-nebula opacity-5"></div>
+      <div className="absolute inset-0 bg-star-field opacity-0 dark:opacity-10 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-nebula opacity-0 dark:opacity-5 transition-opacity duration-300"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -99,10 +104,10 @@ export default function FeaturedWork() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl lg:text-5xl font-display font-bold text-white mb-6">
-            Featured <span className="text-cosmic">Work</span>
+          <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
+            Featured <span className="text-primary-600 dark:text-cosmic">Work</span>
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-white/80 max-w-3xl mx-auto transition-colors duration-300">
             Discover our latest captures of love, joy, and celebration. Each moment tells a unique story.
           </p>
         </motion.div>
@@ -121,8 +126,8 @@ export default function FeaturedWork() {
               onClick={() => setActiveFilter(filter)}
               className={`px-6 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 ${
                 activeFilter === filter
-                  ? 'bg-primary-500 text-white shadow-cosmic cosmic-glow'
-                  : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white glass-effect'
+                  ? 'bg-primary-500 text-white shadow-md dark:shadow-cosmic dark:cosmic-glow'
+                  : 'bg-white text-gray-700 shadow-sm hover:bg-primary-50 hover:text-primary-600 dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/20 dark:hover:text-white border border-gray-200 dark:border-transparent dark:glass-effect'
               }`}
             >
               {filter}
@@ -146,7 +151,7 @@ export default function FeaturedWork() {
                   type: "spring",
                   stiffness: 100
                 }}
-                className="group relative overflow-hidden rounded-2xl bg-space-900/50 backdrop-blur-sm border border-white/10 premium-hover"
+                className="group relative overflow-hidden rounded-2xl bg-white shadow-xl shadow-gray-200/50 dark:bg-space-900/50 dark:shadow-none dark:backdrop-blur-sm border border-gray-100 dark:border-white/10 premium-hover transition-all duration-300"
               >
                 {/* Image Container */}
                 <div className="relative aspect-[4/5] overflow-hidden">
@@ -197,12 +202,12 @@ export default function FeaturedWork() {
 
                 {/* Content */}
                 <div className="p-6 space-y-4">
-                  <h3 className="text-xl font-semibold text-white group-hover:text-primary-500 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
                     {item.title}
                   </h3>
                   
                   {/* Location & Date */}
-                  <div className="flex items-center space-x-4 text-white/60 text-sm">
+                  <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm transition-colors">
                     <div className="flex items-center space-x-1">
                       <MapPin className="w-4 h-4" />
                       <span>{item.location}</span>
@@ -214,7 +219,7 @@ export default function FeaturedWork() {
                   </div>
 
                   {/* Stats */}
-                  <div className="flex items-center justify-between text-white/60 text-sm">
+                  <div className="flex items-center justify-between text-gray-500 dark:text-white/60 text-sm transition-colors">
                     <div className="flex items-center space-x-4">
                       <span className="flex items-center space-x-1">
                         <Heart className="w-4 h-4" />
@@ -247,6 +252,7 @@ export default function FeaturedWork() {
             variant="secondary"
             size="lg"
             className="cosmic-glow"
+            onClick={() => router.push('/portfolio')}
           >
             View Full Portfolio
           </Button>
