@@ -1,326 +1,187 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
-  ArrowUpRight,
-  Camera,
-  FileText,
-  Film,
-  FolderKanban,
-  GalleryHorizontal,
-  MessageCircle,
-  PlusCircle,
-  Sparkles,
-  Users,
+  ArrowUpRight, Camera, FileText, Film, FolderKanban,
+  GalleryHorizontal, MessageCircle, PlusCircle, Sparkles, Users,
 } from 'lucide-react';
-
 import Button from '@/components/ui/Button';
 
-const metrics = [
-  {
-    title: 'Albums',
-    value: 18,
-    delta: '+2 this week',
-    icon: FolderKanban,
-    accent: 'from-primary-500/60 to-primary-600/40',
-  },
-  {
-    title: 'Photos',
-    value: 684,
-    delta: '+76 awaiting review',
-    icon: GalleryHorizontal,
-    accent: 'from-purple-500/60 to-purple-600/40',
-  },
-  {
-    title: 'Films',
-    value: 32,
-    delta: '3 scheduled launches',
-    icon: Film,
-    accent: 'from-rose-500/60 to-rose-600/40',
-  },
-  {
-    title: 'Blog Drafts',
-    value: 7,
-    delta: 'Ready for editorial',
-    icon: FileText,
-    accent: 'from-amber-500/60 to-amber-600/40',
-  },
-];
+interface DashboardStats {
+  albums: number;
+  photos: number;
+  films: number;
+  publishedPosts: number;
+  draftPosts: number;
+  testimonials: number;
+  newContacts: number;
+  recentContacts: Array<{ id: string; name: string; eventType: string; status: string; createdAt: string; email: string }>;
+}
 
 const quickActions = [
-  {
-    label: 'New Album',
-    description: 'Curate a cinematic story and publish instantly.',
-    icon: Camera,
-    href: '/admin/albums/new',
-  },
-  {
-    label: 'Upload Gallery',
-    description: 'Drag & drop a collection of hero images.',
-    icon: GalleryHorizontal,
-    href: '/admin/photos/upload',
-  },
-  {
-    label: 'Publish Film',
-    description: 'Embed a Cloudinary, Vimeo, or YouTube highlight.',
-    icon: Film,
-    href: '/admin/films/new',
-  },
-  {
-    label: 'Compose Blog',
-    description: 'Tell a story with the Markdown editor.',
-    icon: FileText,
-    href: '/admin/blog/new',
-  },
+  { label: 'Albums', description: 'Manage photo albums', icon: Camera, href: '/admin/albums' },
+  { label: 'Photos', description: 'Upload & organise photos', icon: GalleryHorizontal, href: '/admin/photos' },
+  { label: 'Films', description: 'Add or edit wedding films', icon: Film, href: '/admin/films' },
+  { label: 'Blog', description: 'Write & publish posts', icon: FileText, href: '/admin/blog' },
+  { label: 'Testimonials', description: 'Manage client reviews', icon: Users, href: '/admin/testimonials' },
+  { label: 'Bookings', description: 'View enquiries & bookings', icon: MessageCircle, href: '/admin/contacts' },
 ];
 
-const pipeline = [
-  {
-    title: 'Candid Love Story',
-    stage: 'Final color grading',
-    owner: 'Naveen',
-    due: 'Oct 12',
-    type: 'Film',
-  },
-  {
-    title: 'Graduation Glory',
-    stage: 'Album curation',
-    owner: 'Keerththi',
-    due: 'Oct 08',
-    type: 'Album',
-  },
-  {
-    title: 'Winter Weddings Guide',
-    stage: 'Editorial review',
-    owner: 'Anjali',
-    due: 'Oct 05',
-    type: 'Blog',
-  },
-];
+const card = 'rounded-2xl border border-white/10 bg-gray-900 p-6';
+const innerCard = 'rounded-xl border border-white/10 bg-gray-800/60 p-4';
 
-const testimonials = [
-  {
-    name: 'Thiven & Nethra',
-    event: 'Destination Wedding',
-    quote:
-      'Every frame felt like a dream. The cinematic storytelling left us speechless.',
-  },
-  {
-    name: 'Aarav & Maya',
-    event: 'Engagement',
-    quote:
-      'From the direction to the lighting, it was pure artistry. Our families are obsessed.',
-  },
-];
+const statusColors: Record<string, string> = {
+  NEW: 'bg-blue-500/20 text-blue-400',
+  IN_PROGRESS: 'bg-amber-500/20 text-amber-400',
+  ARCHIVED: 'bg-white/10 text-white/40',
+};
 
-const AdminPage = () => {
+export default function AdminPage() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+
+  useEffect(() => {
+    fetch('/api/admin/dashboard')
+      .then((r) => r.json())
+      .then(setStats)
+      .catch(() => {});
+  }, []);
+
+  const metrics = stats
+    ? [
+        { title: 'Albums', value: stats.albums, icon: FolderKanban, accent: 'from-primary-600 to-primary-700' },
+        { title: 'Photos', value: stats.photos, icon: GalleryHorizontal, accent: 'from-purple-600 to-purple-700' },
+        { title: 'Films', value: stats.films, icon: Film, accent: 'from-rose-600 to-rose-700' },
+        { title: 'Blog Posts', value: stats.publishedPosts, delta: `${stats.draftPosts} drafts`, icon: FileText, accent: 'from-amber-600 to-amber-700' },
+      ]
+    : [];
+
   return (
-    <section className="space-y-10">
+    <section className="space-y-8">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 via-white/2 to-white/5 p-10 shadow-2xl"
+        transition={{ duration: 0.5 }}
+        className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-primary-600/30 via-gray-900 to-gray-900 p-8"
       >
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(200,200,255,0.15),_transparent_45%)]" />
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(237,64,1,0.15),_transparent_60%)]" />
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Control Center</p>
-            <h1 className="mt-4 text-4xl font-display font-semibold text-white">
-              Welcome back, visionary.
-            </h1>
-            <p className="mt-4 max-w-xl text-white/70">
-              Your cinematic universe is humming. Track launches, ship new stories, and keep the
-              magic alive.
+            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Control Centre</p>
+            <h1 className="mt-2 text-3xl font-display font-semibold text-white">Welcome back, Keerththikan.</h1>
+            <p className="mt-2 text-sm text-white/70 max-w-lg">
+              Your cinematic universe is humming. Track launches, ship new stories, and keep the magic alive.
             </p>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button variant="ghost" className="gap-2 border border-white/10 bg-white/5 text-white">
-              <Sparkles className="h-5 w-5" />
-              Inspire me
-            </Button>
-            <Button variant="primary" className="gap-2">
-              <PlusCircle className="h-5 w-5" />
-              New project
-            </Button>
+          <div className="flex gap-3">
+            <Link href="/admin/blog">
+              <Button variant="ghost" className="gap-2 border border-white/15 text-white/80 hover:text-white text-sm">
+                <Sparkles className="h-4 w-4" /> New Blog
+              </Button>
+            </Link>
+            <Link href="/admin/albums">
+              <Button variant="primary" className="gap-2 text-sm">
+                <PlusCircle className="h-4 w-4" /> New Album
+              </Button>
+            </Link>
           </div>
         </div>
       </motion.div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        {metrics.map((metric) => {
-          const Icon = metric.icon;
-          return (
-            <motion.div
-              key={metric.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg"
-            >
-              <div
-                className={`absolute inset-0 -z-10 bg-gradient-to-br ${metric.accent} opacity-30`}
-              />
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/60">{metric.title}</p>
-                  <p className="mt-4 text-4xl font-display font-semibold text-white">{metric.value}</p>
-                </div>
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
-                  <Icon className="h-6 w-6 text-white" />
-                </span>
-              </div>
-              <p className="mt-6 text-sm text-white/60">{metric.delta}</p>
-            </motion.div>
-          );
-        })}
+      {/* Metric cards */}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats
+          ? metrics.map((metric, i) => {
+              const Icon = metric.icon;
+              return (
+                <motion.div
+                  key={metric.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.07 }}
+                  className={`relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br ${metric.accent}`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.3em] text-white/75">{metric.title}</p>
+                      <p className="mt-3 text-4xl font-display font-bold text-white">{metric.value}</p>
+                    </div>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+                      <Icon className="h-5 w-5 text-white" />
+                    </span>
+                  </div>
+                  {'delta' in metric && <p className="mt-4 text-xs text-white/80">{metric.delta}</p>}
+                </motion.div>
+              );
+            })
+          : Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-32 animate-pulse rounded-2xl bg-gray-800" />
+            ))}
       </div>
 
+      {/* Quick Actions + Recent Bookings */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="rounded-2xl border border-white/10 bg-white/5 p-6"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-white">Launch pipeline</h2>
-              <p className="text-sm text-white/60">Monitor every masterpiece before it debuts.</p>
-            </div>
-            <Button variant="ghost" className="gap-2 text-white/70">
-              View all
-              <ArrowUpRight className="h-4 w-4" />
-            </Button>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className={card}>
+          <div className="mb-5">
+            <h2 className="text-base font-semibold text-white">Quick actions</h2>
+            <p className="text-sm text-white/60">Jump straight into creation.</p>
           </div>
-          <div className="mt-6 space-y-4">
-            {pipeline.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 hover:border-primary-500/60 hover:bg-primary-500/10"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-white/50">{item.type}</p>
-                    <h3 className="mt-2 text-lg font-medium text-white">{item.title}</h3>
-                  </div>
-                  <span className="text-sm text-white/50">Due {item.due}</span>
-                </div>
-                <div className="mt-4 flex items-center justify-between text-sm text-white/60">
-                  <span>{item.stage}</span>
-                  <span>Lead: {item.owner}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.18 }}
-          className="rounded-2xl border border-white/10 bg-white/5 p-6"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-white">Quick actions</h2>
-              <p className="text-sm text-white/60">Jump straight into creation moments.</p>
-            </div>
-          </div>
-          <div className="mt-6 grid gap-4">
+          <div className="grid grid-cols-2 gap-3">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
-                <a
+                <Link
                   key={action.label}
                   href={action.href}
-                  className="group flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 hover:border-primary-500/60 hover:bg-primary-500/10"
+                  className="group flex flex-col gap-2 rounded-xl border border-white/10 bg-gray-800/50 p-4 transition-colors hover:border-primary-500/50 hover:bg-primary-500/10"
                 >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
-                    <Icon className="h-6 w-6 text-white" />
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 group-hover:bg-primary-500/20 transition-colors">
+                    <Icon className="h-4 w-4 text-white/80 group-hover:text-primary-400" />
                   </span>
-                  <div className="flex-1">
-                    <p className="text-base font-medium text-white">{action.label}</p>
-                    <p className="text-sm text-white/60">{action.description}</p>
+                  <div>
+                    <p className="text-sm font-medium text-white">{action.label}</p>
+                    <p className="text-xs text-white/50">{action.description}</p>
                   </div>
-                  <ArrowUpRight className="h-4 w-4 text-white/40 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </a>
+                </Link>
               );
             })}
           </div>
         </motion.div>
-      </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="rounded-2xl border border-white/10 bg-white/5 p-6"
-        >
-          <div className="flex items-center justify-between">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className={card}>
+          <div className="flex items-center justify-between mb-5">
             <div>
-              <h2 className="text-xl font-semibold text-white">Client testimonials</h2>
-              <p className="text-sm text-white/60">Highlight words that make prospects fall in love.</p>
+              <h2 className="text-base font-semibold text-white">Recent bookings</h2>
+              <p className="text-sm text-white/60">
+                {stats ? <>{stats.newContacts} new enquir{stats.newContacts === 1 ? 'y' : 'ies'} awaiting reply</> : 'Loading…'}
+              </p>
             </div>
-            <Button variant="ghost" className="gap-2 text-white/70">
-              Manage
-              <Users className="h-4 w-4" />
-            </Button>
+            <Link href="/admin/contacts">
+              <Button variant="ghost" className="gap-1.5 text-white/70 hover:text-white text-xs">
+                View all <ArrowUpRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
           </div>
-          <div className="mt-6 space-y-4">
-            {testimonials.map((testimonial) => (
-              <div
-                key={testimonial.name}
-                className="rounded-xl border border-white/10 bg-white/5 p-5 shadow-inner shadow-black/40"
-              >
-                <p className="text-white/80">“{testimonial.quote}”</p>
-                <div className="mt-4 flex items-center justify-between text-sm text-white/50">
-                  <span>{testimonial.name}</span>
-                  <span>{testimonial.event}</span>
+          <div className="space-y-2">
+            {stats?.recentContacts.length === 0 && (
+              <p className="text-sm text-white/50 text-center py-8">No bookings yet.</p>
+            )}
+            {stats?.recentContacts.map((c) => (
+              <div key={c.id} className={`${innerCard} flex items-center justify-between gap-3`}>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-white truncate">{c.name}</p>
+                  <p className="text-xs text-white/55">{c.eventType} · {new Date(c.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</p>
                 </div>
+                <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${statusColors[c.status] ?? ''}`}>
+                  {c.status === 'IN_PROGRESS' ? 'In Progress' : c.status}
+                </span>
               </div>
             ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.22 }}
-          className="rounded-2xl border border-white/10 bg-white/5 p-6"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-white">Contact pulse</h2>
-              <p className="text-sm text-white/60">Follow up with prospects while the spark is hot.</p>
-            </div>
-            <Button variant="ghost" className="gap-2 text-white/70">
-              View inbox
-              <MessageCircle className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="mt-6 space-y-4">
-            {[1, 2, 3].map((item) => (
-              <div
-                key={item}
-                className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-5"
-              >
-                <div>
-                  <p className="text-base font-medium text-white">Prospect #{item}</p>
-                  <p className="text-sm text-white/60">Wedding enquiry • Reply within 24h</p>
-                </div>
-                <Button variant="primary" size="sm" className="gap-2">
-                  Reply now
-                  <ArrowUpRight className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
+            {!stats && <div className="h-24 animate-pulse rounded-xl bg-gray-800" />}
           </div>
         </motion.div>
       </div>
     </section>
   );
-};
-
-export default AdminPage;
+}

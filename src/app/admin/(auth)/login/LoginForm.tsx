@@ -48,7 +48,7 @@ const LoginForm = () => {
     });
 
     if (result?.error) {
-      setErrorMessage('Invalid credentials. Please try again.');
+      setErrorMessage('Invalid email or password. After 5 failed attempts your account will be locked for 15 minutes.');
       return;
     }
 

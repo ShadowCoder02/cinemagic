@@ -28,28 +28,42 @@ const ContactPage = () => {
     }));
   };
 
+  const [submitError, setSubmitError] = useState('');
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError('');
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        eventType: '',
-        eventDate: '',
-        message: '',
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-    }, 3000);
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          eventType: '',
+          eventDate: '',
+          message: '',
+        });
+      }, 4000);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -213,6 +227,12 @@ const ContactPage = () => {
                     required
                   />
 
+                  {submitError && (
+                    <div className="rounded-lg border border-red-500/40 bg-red-50 dark:bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-400">
+                      {submitError}
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
                     variant="primary"
@@ -288,11 +308,21 @@ const ContactPage = () => {
 
               {/* Quick Actions */}
               <div className="space-y-4">
-                <Button variant="primary" size="lg" className="w-full">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => { window.location.href = 'tel:+94776216556'; }}
+                >
                   <Phone className="w-5 h-5 mr-2" />
                   Call Now: +94 77 621 6556
                 </Button>
-                <Button variant="outline" size="lg" className="w-full">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => window.open('https://wa.me/94776216556', '_blank', 'noopener,noreferrer')}
+                >
                   <MessageCircle className="w-5 h-5 mr-2" />
                   WhatsApp Chat
                 </Button>
@@ -329,12 +359,12 @@ const ContactPage = () => {
             <iframe
               width="100%"
               height="100%"
-              frameBorder="0"
-              scrolling="no"
-              marginHeight={0}
-              marginWidth={0}
+              style={{ border: 0 }}
               src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=9.6826901,80.0246696+(Cine%20Magic%20Creations)&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
               className="w-full h-full filter dark:invert-[90%] dark:hue-rotate-[180deg] dark:contrast-[80%] transition-all duration-300"
+              title="Cine Magic Creations location"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
           </motion.div>
         </div>

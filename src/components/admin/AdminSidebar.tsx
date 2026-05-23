@@ -9,36 +9,43 @@ const AdminSidebar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="relative hidden w-72 flex-col border-r border-white/10 bg-black/80 pb-10 lg:flex">
-      <div className="flex h-20 items-center px-8">
+    <aside className="relative hidden w-64 flex-shrink-0 flex-col border-r border-white/10 bg-black pb-10 lg:flex">
+      {/* Brand */}
+      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-6">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-500">
+          <span className="text-sm font-bold text-white">C</span>
+        </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-white/60">Cine Magic</p>
-          <h1 className="text-2xl font-display font-bold text-white">Admin Hub</h1>
+          <p className="text-xs uppercase tracking-[0.3em] text-white/60">Cine Magic</p>
+          <p className="text-sm font-semibold text-white leading-tight">Admin Hub</p>
         </div>
       </div>
-      <nav className="mt-6 space-y-1 px-4">
+
+      {/* Nav */}
+      <nav className="mt-4 flex-1 space-y-0.5 px-3">
         {adminNavItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
           const Icon = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200',
+                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150',
                 isActive
-                  ? 'bg-primary-500/90 text-white shadow-lg shadow-primary-500/30'
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-primary-500 text-white shadow-md shadow-primary-500/25'
+                  : 'text-white/75 hover:bg-white/8 hover:text-white'
               )}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-4 w-4 flex-shrink-0" />
               <span>{item.label}</span>
             </Link>
           );
         })}
       </nav>
-      <div className="mt-auto px-6 pt-10 text-xs text-white/40">
-        Cinematic control panel • Crafted for excellence
+
+      <div className="px-6 text-xs text-white/50">
+        Cinematic control panel
       </div>
     </aside>
   );

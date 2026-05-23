@@ -1,335 +1,150 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, Heart, Share2, Calendar, MapPin, Grid, List } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import Image from 'next/image';
 
+interface Photo { id: string; url: string; title: string | null; isFeatured: boolean; order: number; }
+interface Album { id: string; title: string; slug: string; description: string | null; coverImage: string | null; location: string | null; category: string; photos: Photo[]; }
 
-const PortfolioPage = () => {
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [viewMode, setViewMode] = useState<'grid' | 'masonry'>('masonry');
-  const [hoveredItem, setHoveredItem] = useState<number | null>(null);
-  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+export default function PortfolioPage() {
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState('all');
+  const [lightbox, setLightbox] = useState<{ photos: Photo[]; index: number } | null>(null);
 
-  const categories = [
-    { id: 'all', name: 'All Work', count: 48 },
-    { id: 'weddings', name: 'Weddings', count: 28 },
-    { id: 'engagements', name: 'Engagements', count: 12 },
-    { id: 'graduations', name: 'Graduations', count: 8 },
-  ];
+  useEffect(() => {
+    fetch('/api/albums').then((r) => r.json()).then(setAlbums).catch(() => {}).finally(() => setLoading(false));
+  }, []);
 
-  const portfolioItems = [
-    {
-      id: 1,
-      title: 'Sarah & Michael\'s Wedding',
-      category: 'weddings',
-      location: 'Jaffna, Sri Lanka',
-      date: 'December 2024',
-      image: '/images/portfolio/wedding-1.jpg',
-      likes: 124,
-      views: 2340,
-      featured: true,
-      tags: ['traditional', 'outdoor', 'ceremony'],
-    },
-    {
-      id: 2,
-      title: 'Graduation Celebration',
-      category: 'graduations',
-      location: 'University of Jaffna',
-      date: 'November 2024',
-      image: '/images/portfolio/graduation-1.jpg',
-      likes: 89,
-      views: 1560,
-      featured: true,
-      tags: ['academic', 'celebration', 'formal'],
-    },
-    {
-      id: 3,
-      title: 'Romantic Engagement',
-      category: 'engagements',
-      location: 'Nallur Temple',
-      date: 'October 2024',
-      image: '/images/portfolio/engagement-1.jpg',
-      likes: 156,
-      views: 2890,
-      featured: true,
-      tags: ['romantic', 'temple', 'traditional'],
-    },
-    {
-      id: 4,
-      title: 'Traditional Wedding',
-      category: 'weddings',
-      location: 'Colombo, Sri Lanka',
-      date: 'September 2024',
-      image: '/images/portfolio/wedding-2.jpg',
-      likes: 203,
-      views: 3450,
-      featured: false,
-      tags: ['traditional', 'indoor', 'ceremony'],
-    },
-    {
-      id: 5,
-      title: 'Medical School Graduation',
-      category: 'graduations',
-      location: 'Jaffna Medical College',
-      date: 'August 2024',
-      image: '/images/portfolio/graduation-2.jpg',
-      likes: 178,
-      views: 2670,
-      featured: false,
-      tags: ['medical', 'academic', 'achievement'],
-    },
-    {
-      id: 6,
-      title: 'Beach Engagement',
-      category: 'engagements',
-      location: 'Trincomalee Beach',
-      date: 'July 2024',
-      image: '/images/portfolio/engagement-2.jpg',
-      likes: 134,
-      views: 1980,
-      featured: false,
-      tags: ['beach', 'romantic', 'sunset'],
-    },
-    {
-      id: 7,
-      title: 'Garden Wedding',
-      category: 'weddings',
-      location: 'Kandy, Sri Lanka',
-      date: 'June 2024',
-      image: '/images/portfolio/wedding-3.jpg',
-      likes: 167,
-      views: 3120,
-      featured: false,
-      tags: ['garden', 'outdoor', 'nature'],
-    },
-    {
-      id: 8,
-      title: 'Engineering Graduation',
-      category: 'graduations',
-      location: 'University of Jaffna',
-      date: 'May 2024',
-      image: '/images/portfolio/graduation-3.jpg',
-      likes: 145,
-      views: 2230,
-      featured: false,
-      tags: ['engineering', 'academic', 'celebration'],
-    },
-  ];
+  const categories = ['all', ...Array.from(new Set(albums.map((a) => a.category)))];
+  const filtered = category === 'all' ? albums : albums.filter((a) => a.category === category);
 
-  const filteredItems = activeCategory === 'all'
-    ? portfolioItems
-    : portfolioItems.filter(item => item.category === activeCategory);
+  // Flatten all photos for lightbox navigation
+
+
+  const openLightbox = (photos: Photo[], index: number) => setLightbox({ photos, index });
+  const closeLightbox = () => setLightbox(null);
+  const prev = () => setLightbox((l) => l ? { ...l, index: (l.index - 1 + l.photos.length) % l.photos.length } : null);
+  const next = () => setLightbox((l) => l ? { ...l, index: (l.index + 1) % l.photos.length } : null);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (!lightbox) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [lightbox]);
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-black transition-colors duration-300">
-
-
-      {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-b from-slate-100 to-white dark:from-black dark:to-gray-900 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl lg:text-6xl font-display font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
-              Our <span className="text-gradient">Portfolio</span>
-            </h1>
-            <p className="text-xl text-gray-700 dark:text-white/80 max-w-3xl mx-auto transition-colors duration-300">
-              Explore our collection of wedding photography, films, and graduation captures.
-              Each image tells a unique story of love, joy, and celebration.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Filters & Controls */}
-      <section className="py-8 bg-white/80 dark:bg-gray-900/50 backdrop-blur-sm border-b border-gray-200 dark:border-white/10 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeCategory === category.id
-                      ? 'bg-primary-500 text-white shadow-lg'
-                      : 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                >
-                  {category.name} ({category.count})
-                </button>
-              ))}
-            </div>
-
-            {/* View Controls */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-gray-100 dark:bg-white/10 rounded-lg p-1 transition-colors">
-                <button
-                  onClick={() => setViewMode('masonry')}
-                  className={`p-2 rounded transition-colors ${viewMode === 'masonry' ? 'bg-primary-500 text-white' : 'text-gray-500 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                >
-                  <Grid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-primary-500 text-white' : 'text-gray-500 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+      <section className="pt-24 pb-12 bg-gradient-to-b from-slate-100 to-white dark:from-black dark:to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+            className="text-4xl lg:text-6xl font-display font-bold text-gray-900 dark:text-white mb-4">
+            Our <span className="text-primary-500">Portfolio</span>
+          </motion.h1>
+          <p className="text-lg text-gray-600 dark:text-white/60 max-w-xl mx-auto mb-8">
+            Each image tells a unique story of love, joy, and celebration.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {categories.map((c) => (
+              <button key={c} onClick={() => setCategory(c)}
+                className={"rounded-full px-4 py-1.5 text-sm font-medium capitalize transition-colors " +
+                  (category === c ? 'bg-primary-500 text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-white/70 border border-gray-200 dark:border-white/10 hover:border-primary-500 hover:text-primary-500')}>
+                {c === 'all' ? 'All Work' : c}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Portfolio Grid */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            layout
-            className={
-              viewMode === 'masonry'
-                ? 'masonry-grid'
-                : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
-            }
-          >
-            <AnimatePresence>
-              {filteredItems.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-none shadow-sm dark:shadow-none transition-colors duration-300 ${viewMode === 'masonry' ? 'masonry-item' : ''
-                    }`}
-                  onMouseEnter={() => setHoveredItem(item.id)}
-                  onMouseLeave={() => setHoveredItem(null)}
-                  onClick={() => setSelectedImage(item.id)}
-                >
-                  {/* Image */}
-                  <div className="relative aspect-[4/5] overflow-hidden">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-16">
+        {loading && (
+          <div className="columns-2 sm:columns-3 gap-4 mt-8 space-y-4">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <div key={i} className={"animate-pulse rounded-2xl bg-gray-200 dark:bg-gray-800 " + (i % 3 === 0 ? 'h-64' : 'h-48')} />
+            ))}
+          </div>
+        )}
 
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {!loading && filtered.length === 0 && (
+          <p className="text-center text-gray-500 dark:text-white/40 py-24">No albums yet. Check back soon.</p>
+        )}
 
-                    {/* Featured Badge */}
-                    {item.featured && (
-                      <div className="absolute top-4 left-4 bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        Featured
+        {filtered.map((album) => (
+          <div key={album.id}>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-display font-semibold text-gray-900 dark:text-white capitalize">{album.title}</h2>
+                {album.location && (
+                  <p className="text-sm text-gray-500 dark:text-white/50 flex items-center gap-1 mt-1">
+                    <MapPin className="h-3.5 w-3.5" />{album.location}
+                  </p>
+                )}
+              </div>
+              <span className="rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-white/10 px-3 py-1 text-sm text-gray-600 dark:text-white/60">
+                {album.photos.length} photos
+              </span>
+            </div>
+            {album.photos.length === 0 ? (
+              <p className="text-sm text-gray-400 dark:text-white/30">No photos in this album yet.</p>
+            ) : (
+              <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
+                {album.photos.map((photo, idx) => (
+                  <motion.div key={photo.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: idx * 0.04 }}
+                    className="group relative overflow-hidden rounded-xl cursor-zoom-in break-inside-avoid"
+                    onClick={() => openLightbox(album.photos, idx)}>
+                    <div className="relative bg-gray-200 dark:bg-gray-800">
+                      <Image src={photo.url} alt={photo.title ?? album.title} width={600} height={400}
+                        className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors" />
+                    {photo.title && (
+                      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent translate-y-full group-hover:translate-y-0 transition-transform">
+                        <p className="text-xs text-white">{photo.title}</p>
                       </div>
                     )}
-
-                    {/* Hover Actions */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{
-                        opacity: hoveredItem === item.id ? 1 : 0,
-                        y: hoveredItem === item.id ? 0 : 20
-                      }}
-                      className="absolute inset-0 flex items-center justify-center space-x-4"
-                    >
-                      <button className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
-                        <Eye className="w-5 h-5" />
-                      </button>
-                      <button className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
-                        <Heart className="w-5 h-5" />
-                      </button>
-                      <button className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
-                        <Share2 className="w-5 h-5" />
-                      </button>
-                    </motion.div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-500 transition-colors">
-                      {item.title}
-                    </h3>
-
-                    <div className="flex items-center space-x-4 text-gray-500 dark:text-white/60 text-sm mb-3 transition-colors">
-                      <div className="flex items-center space-x-1">
-                        <MapPin className="w-4 h-4" />
-                        <span>{item.location}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Calendar className="w-4 h-4" />
-                        <span>{item.date}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between text-gray-500 dark:text-white/60 text-sm transition-colors">
-                      <div className="flex items-center space-x-4">
-                        <span className="flex items-center space-x-1">
-                          <Heart className="w-4 h-4" />
-                          <span>{item.likes}</span>
-                        </span>
-                        <span className="flex items-center space-x-1">
-                          <Eye className="w-4 h-4" />
-                          <span>{item.views}</span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
       </section>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox */}
       <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
-            onClick={() => setSelectedImage(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center p-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-              >
-                ×
-              </button>
-              <div className="relative w-full h-[80vh]">
-                <Image
-                  src={portfolioItems.find(item => item.id === selectedImage)?.image || ''}
-                  alt={portfolioItems.find(item => item.id === selectedImage)?.title || ''}
-                  fill
-                  className="object-contain rounded-lg"
-                />
-              </div>
+        {lightbox && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+            onClick={closeLightbox}>
+            <button onClick={(e) => { e.stopPropagation(); prev(); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 hover:bg-white/20 p-3 text-white transition-colors">
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+            <motion.div key={lightbox.index} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+              className="relative max-h-[90vh] max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+              <Image src={lightbox.photos[lightbox.index].url} alt={lightbox.photos[lightbox.index].title ?? 'Photo'}
+                width={1200} height={800} className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg" />
             </motion.div>
+            <button onClick={(e) => { e.stopPropagation(); next(); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 hover:bg-white/20 p-3 text-white transition-colors">
+              <ChevronRight className="h-6 w-6" />
+            </button>
+            <button onClick={closeLightbox} className="absolute top-4 right-4 rounded-full bg-white/10 hover:bg-white/20 p-2 text-white transition-colors">
+              <X className="h-5 w-5" />
+            </button>
+            <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-sm">
+              {lightbox.index + 1} / {lightbox.photos.length}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
-
-
     </main>
   );
-};
-
-export default PortfolioPage;
+}

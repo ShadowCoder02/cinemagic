@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
+import ConditionalPublicLayout from "@/components/layout/ConditionalPublicLayout";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -159,14 +157,9 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased min-h-screen bg-slate-50 text-slate-900 dark:bg-cosmic-black dark:text-white transition-colors duration-300`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <WhatsAppFloat />
-            <Footer />
-          </div>
+          <ConditionalPublicLayout>
+            {children}
+          </ConditionalPublicLayout>
         </ThemeProvider>
       </body>
     </html>

@@ -159,17 +159,23 @@ export default function HeroSection() {
                 variant="primary"
                 size="lg"
                 className="group cosmic-glow"
-                onClick={() => router.push('/#portfolio')}
+                onClick={() => {
+                  const el = document.getElementById('portfolio');
+                  if (el) { el.scrollIntoView({ behavior: 'smooth' }); } else { router.push('/portfolio'); }
+                }}
               >
                 <Play className="w-5 h-5 mr-2 group-hover:animate-pulse" />
                 View Portfolio
               </Button>
-              
+
               <Button
                 variant="secondary"
                 size="lg"
                 className="group glass-effect hover:bg-white/20"
-                onClick={() => router.push('/#contact')}
+                onClick={() => {
+                  const el = document.getElementById('contact');
+                  if (el) { el.scrollIntoView({ behavior: 'smooth' }); } else { router.push('/contact'); }
+                }}
               >
                 <Calendar className="w-5 h-5 mr-2 group-hover:animate-pulse" />
                 Book Your Wedding Film

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Camera, Video, Award, Users, Heart, Star, Quote, MapPin, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Button from '@/components/ui/Button';
 
 
@@ -321,12 +322,16 @@ const AboutPage = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <Button variant="primary" size="lg">
-                Book Consultation
-              </Button>
-              <Button variant="outline" size="lg">
-                View Portfolio
-              </Button>
+              <Link href="/contact">
+                <Button variant="primary" size="lg">
+                  Book Consultation
+                </Button>
+              </Link>
+              <Link href="/portfolio">
+                <Button variant="outline" size="lg">
+                  View Portfolio
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>

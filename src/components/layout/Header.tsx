@@ -4,9 +4,43 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Phone, Instagram } from 'lucide-react';
+import { Menu, X, PhoneCall } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import Image from 'next/image';
+
+const InstagramIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+);
+
+const AnimatedCallIcon = () => (
+  <div className="relative w-8 h-8 flex items-center justify-center">
+    {/* Ripple ring 1 */}
+    <motion.span
+      className="absolute inset-0 rounded-full bg-primary-500/30"
+      animate={{ scale: [0.75, 1.75], opacity: [0.8, 0] }}
+      transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut', repeatDelay: 1.2 }}
+    />
+    {/* Ripple ring 2 */}
+    <motion.span
+      className="absolute inset-0 rounded-full bg-primary-500/20"
+      animate={{ scale: [0.75, 2.1], opacity: [0.6, 0] }}
+      transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut', repeatDelay: 1.2, delay: 0.4 }}
+    />
+    {/* Ringing icon */}
+    <motion.div
+      className="relative z-10"
+      animate={{ rotate: [0, -14, 14, -10, 10, -5, 5, 0] }}
+      transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
+    >
+      <PhoneCall className="w-5 h-5 text-primary-500" />
+    </motion.div>
+  </div>
+);
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,12 +80,16 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="text-2xl lg:text-3xl font-display font-bold text-gradient"
-            >
-              Cine Magic
+          <Link href="/" className="flex items-center">
+            <motion.div whileHover={{ scale: 1.04 }} transition={{ type: 'spring', stiffness: 400, damping: 20 }}>
+              <Image
+                src="/images/logo-cropped.png"
+                alt="Cinemagic Creations"
+                width={1297}
+                height={304}
+                className="h-10 lg:h-12 w-auto object-contain"
+                priority
+              />
             </motion.div>
           </Link>
 
@@ -96,7 +134,7 @@ const Header = () => {
               className="text-gray-900 dark:text-white/80 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
               aria-label="Call us"
             >
-              <Phone className="w-5 h-5" />
+              <AnimatedCallIcon />
             </a>
             <a
               href="https://instagram.com/cine_magic_creations"
@@ -104,7 +142,7 @@ const Header = () => {
               rel="noopener noreferrer"
               className="text-gray-900 dark:text-white/80 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
             >
-              <Instagram className="w-5 h-5" />
+              <InstagramIcon />
             </a>
             <ThemeToggle />
             <Button variant="primary" size="sm" onClick={() => router.push('/#contact')}>
@@ -159,7 +197,7 @@ const Header = () => {
                     className="text-gray-900 dark:text-white/80 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
                     aria-label="Call us"
                   >
-                    <Phone className="w-5 h-5" />
+                    <AnimatedCallIcon />
                   </a>
                   <a
                     href="https://instagram.com/cine_magic_creations"
@@ -167,7 +205,7 @@ const Header = () => {
                     rel="noopener noreferrer"
                     className="text-gray-900 dark:text-white/80 hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
                   >
-                    <Instagram className="w-5 h-5" />
+                    <InstagramIcon />
                   </a>
                 </div>
                 <Button
