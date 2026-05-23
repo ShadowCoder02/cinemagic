@@ -5,6 +5,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 
 import { prisma } from './prisma';
+import { authConfig } from './auth.config';
 
 const credentialsSchema = z.object({
   email: z.string().email(),
@@ -20,13 +21,11 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt',
     maxAge: 8 * 60 * 60,
-  },
-  pages: {
-    signIn: '/admin/login',
   },
   providers: [
     Credentials({
@@ -73,20 +72,4 @@ export const {
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.role = (user as { role?: string }).role ?? 'ADMIN';
-        token.id = user.id;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.role = (token.role as string) ?? 'ADMIN';
-        (session.user as { id?: string }).id = token.id as string;
-      }
-      return session;
-    },
-  },
 });
