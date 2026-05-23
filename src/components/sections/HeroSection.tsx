@@ -98,7 +98,7 @@ export default function HeroSection() {
       </div>
 
       {/* Navigation Dots */}
-      <div className="absolute top-1/2 left-8 transform -translate-y-1/2 z-20">
+      <div className="absolute top-1/2 left-8 transform -translate-y-1/2 z-20 hidden sm:block">
         <div className="flex flex-col space-y-4">
           {heroVideos.map((_, index) => (
             <button
@@ -115,18 +115,17 @@ export default function HeroSection() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center h-full">
-        <div className="text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-          {/* Keep messaging centered so the rotating imagery remains a cinematic backdrop without competing focal points */}
+      <div className="relative z-10 flex items-center justify-center h-full pt-16 lg:pt-20">
+        <div className="text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="space-y-8"
+            className="space-y-4 sm:space-y-8"
           >
             {/* Cosmic Title */}
-            <motion.h1 
-              className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold text-gray-900 dark:text-white leading-tight transition-colors duration-300"
+            <motion.h1
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold text-gray-900 dark:text-white leading-tight transition-colors duration-300"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7 }}
@@ -139,8 +138,8 @@ export default function HeroSection() {
               in Jaffna & Beyond
             </motion.h1>
 
-            <motion.p 
-              className="text-xl lg:text-2xl text-gray-700 dark:text-white/90 max-w-3xl mx-auto leading-relaxed transition-colors duration-300"
+            <motion.p
+              className="text-base sm:text-xl lg:text-2xl text-gray-700 dark:text-white/90 max-w-3xl mx-auto leading-relaxed transition-colors duration-300"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.9 }}
@@ -149,8 +148,8 @@ export default function HeroSection() {
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div 
-              className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+            <motion.div
+              className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1.1 }}
@@ -183,36 +182,26 @@ export default function HeroSection() {
             </motion.div>
 
             {/* Stats */}
-            <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto pt-12"
+            <motion.div
+              className="grid grid-cols-3 gap-2 sm:gap-6 max-w-4xl mx-auto pt-2 sm:pt-8"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1.3 }}
             >
-              <div className="flex flex-col items-center justify-center p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 shadow-xl dark:shadow-2xl">
-                <div className="text-4xl lg:text-5xl font-display font-bold text-primary-600 dark:text-primary-500 mb-2 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
-                  500+
+              {[
+                { value: '500+', label: 'Weddings Captured' },
+                { value: '8+', label: 'Years Experience' },
+                { value: '100%', label: 'Client Satisfaction' },
+              ].map((stat) => (
+                <div key={stat.label} className="flex flex-col items-center justify-center p-3 sm:p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl sm:rounded-2xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 shadow-xl dark:shadow-2xl">
+                  <div className="text-xl sm:text-4xl lg:text-5xl font-display font-bold text-primary-600 dark:text-primary-500 mb-0.5 sm:mb-2 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
+                    {stat.value}
+                  </div>
+                  <div className="text-gray-800 dark:text-white/80 font-medium text-[10px] sm:text-sm lg:text-base tracking-wide transition-colors duration-300 leading-tight text-center">
+                    {stat.label}
+                  </div>
                 </div>
-                <div className="text-gray-800 dark:text-white/80 font-medium text-sm lg:text-base tracking-wide transition-colors duration-300">
-                  Weddings Captured
-                </div>
-              </div>
-              <div className="flex flex-col items-center justify-center p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 shadow-xl dark:shadow-2xl">
-                <div className="text-4xl lg:text-5xl font-display font-bold text-primary-600 dark:text-primary-500 mb-2 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
-                  8+
-                </div>
-                <div className="text-gray-800 dark:text-white/80 font-medium text-sm lg:text-base tracking-wide transition-colors duration-300">
-                  Years Experience
-                </div>
-              </div>
-              <div className="flex flex-col items-center justify-center p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl hover:bg-white/60 dark:hover:bg-white/5 transition-all duration-300 group hover:-translate-y-2 shadow-xl dark:shadow-2xl">
-                <div className="text-4xl lg:text-5xl font-display font-bold text-primary-600 dark:text-primary-500 mb-2 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
-                  100%
-                </div>
-                <div className="text-gray-800 dark:text-white/80 font-medium text-sm lg:text-base tracking-wide transition-colors duration-300">
-                  Client Satisfaction
-                </div>
-              </div>
+              ))}
             </motion.div>
           </motion.div>
         </div>

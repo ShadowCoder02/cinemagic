@@ -66,7 +66,7 @@ const LoginForm = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-10 backdrop-blur-lg shadow-2xl"
+          className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-10 backdrop-blur-lg shadow-2xl"
         >
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-500/10 text-primary-400">
